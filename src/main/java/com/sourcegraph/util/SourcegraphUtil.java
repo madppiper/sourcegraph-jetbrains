@@ -11,6 +11,7 @@ import java.util.Properties;
 
 public class SourcegraphUtil {
     public static String VERSION = "v1.2.2";
+    public static final String TEST_URL = "https://sourcegraph.com/";
 
     // gitRemoteURL returns the remote URL for the given remote name.
     // e.g. "origin" -> "git@github.com:foo/bar"

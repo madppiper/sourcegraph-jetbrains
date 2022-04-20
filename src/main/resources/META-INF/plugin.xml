@@ -9,6 +9,7 @@
 
   <extensions defaultExtensionNs="com.intellij">
     <projectService serviceInterface="com.sourcegraph.project.SourcegraphConfig" serviceImplementation="com.sourcegraph.project.SourcegraphConfig"/>
+    <toolWindow id="JCEF Window" icon="/icons/sourcegraph-mark.svg" anchor="right" factoryClass="com.sourcegraph.ui.JCEFWindowFactory"/>
   </extensions>
 
   <actions>
