@@ -1,14 +1,13 @@
 package com.sourcegraph.ui;
 
-import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.ui.jcef.JBCefApp;
 import com.intellij.ui.jcef.JBCefBrowser;
 import com.intellij.ui.jcef.JBCefBrowserBase;
 import com.intellij.ui.jcef.JBCefJSQuery;
-import com.sourcegraph.util.SourcegraphUtil;
+import com.sourcegraph.browser.SourcegraphSchemeHandlerFactory;
+import org.cef.CefApp;
 import org.cef.browser.CefBrowser;
 import org.cef.browser.CefFrame;
 import org.cef.handler.CefLoadHandler;
@@ -18,11 +17,10 @@ import javax.swing.*;
 import java.awt.*;
 
 public class JCEFWindow {
-    private final Logger logger = Logger.getInstance(this.getClass());
     private JPanel panel;
     private Project project;
     private ToolWindow toolWindow;
-    private JBCefBrowserBase browser = new JBCefBrowser(SourcegraphUtil.TEST_URL);
+    private JBCefBrowserBase browser = new JBCefBrowser("http://sourcegraph/index.html") ;
     private CefBrowser cefBrowser = browser.getCefBrowser();
     private JBCefJSQuery query;
 
@@ -35,13 +33,21 @@ public class JCEFWindow {
             panel.add(warningLabel);
             return;
         }
-        panel.add(browser.getComponent(),BorderLayout.CENTER);
 
+
+        CefApp
+                .getInstance()
+                .registerSchemeHandlerFactory(
+                        "http",
+                        "sourcegraph",
+                        new SourcegraphSchemeHandlerFactory()
+                );
+
+        panel.add(browser.getComponent(),BorderLayout.CENTER);
 
         //Define javascript callback (here for function "test(obj)" -> we will bind them onLoad
         JBCefJSQuery myQueryInBrowser = JBCefJSQuery.create((JBCefBrowserBase) browser);
         myQueryInBrowser.addHandler((link) -> {
-            logger.info(""+link);
             return null;
         });
 
@@ -70,7 +76,6 @@ public class JCEFWindow {
             }
             @Override
             public void onLoadError(CefBrowser cefBrowser, CefFrame frame, ErrorCode errorCode, String errorText, String failedUrl) {
-                System.out.println("JBCefLoadHtmlTest.onLoadError: " + failedUrl);
             }
         }, cefBrowser);
 

@@ -1,0 +1,14 @@
+<html>
+<head>
+  <title>Sourcegraph</title>
+</head>
+<body>
+  <input type="text" value="" autofocus="true">
+  <pre id="pre"></pre>
+  <script type="module">
+    document.addEventListener('keydown', e => {
+      pre.innerText = `key: ${e.key}, code: ${e.code}, keyCode: ${e.keyCode}, altKey: ${e.altKey}, ctrlKey: ${e.ctrlKey}, shiftKey: ${e.shiftKey}, metaKey: ${e.metaKey}\n${pre.innerText}`;
+    });
+  </script>
+</body>
+</html>
